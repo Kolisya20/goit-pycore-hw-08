@@ -26,3 +26,17 @@ class AddressBook(UserDict):
                     upcoming_birthdays.append(record)
 
         return upcoming_birthdays
+    
+    def find_by_email(self, email):
+        results = []
+        for record in self.data.values():
+            if record.find_email(email) is not None:
+                results.append(record)
+        return results
+    
+    def find_by_phone(self, phone):
+        results = []
+        for record in self.data.values():
+            if record.find_phone(phone) is not None:
+                results.append(record)
+        return results

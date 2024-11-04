@@ -1,10 +1,11 @@
-from models.field import Name, Phone, Birthday
+from models.field import Name, Phone, Birthday, Email
 from datetime import datetime, timedelta
 
 class Record:
     def __init__(self, name) -> None:
         self.name = Name(name)
         self.phones = []
+        self.emails = []
         self.birthday = None
     
     def add_phone(self, phone):
@@ -54,6 +55,43 @@ class Record:
         if next_birthdays < today:
             next_birthdays = next_birthdays.replace(year=today.year + 1)
         return (next_birthdays - today).days
+
+    def add_email(self, email):
+            email_obj = Email(email)
+            self.emails.append(email_obj)    
+
+    def edit_email(self, old_email, new_email):
+        if not Email.validate(new_email):
+            raise ValueError("Wrong format")
+        
+        for email_obj in self.emails:
+            if email_obj.value == old_email:
+                email_obj.value = new_email
+                return True
+        return False
+
+    def find_email(self, email):
+        for email_obj in self.emails:
+            if email_obj.value == email:
+                return email_obj
+        return None
+    
+    def remove_email(self, email):
+        for email_obj in self.emails:
+            if email_obj.value == email:
+                self.emails.remove(email_obj)
+                return True
+        return False
+
+    def edit_email(self, old_email, new_email):
+        if not Phone.validate_and_format(new_email):
+            raise ValueError("Wrong format")
+        
+        for email_obj in self.phones:
+            if email_obj.value == old_email:
+                email_obj.value = new_email
+                return True
+        return False
 
     def __str__(self):
         phones_str = "; ".join(phone.value for phone in self.phones)
